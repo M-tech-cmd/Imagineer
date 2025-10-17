@@ -1,6 +1,8 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import connectDB from './mongodb/connect.js';
 import postRoutes from './routes/postRoutes.js';
@@ -15,18 +17,23 @@ app.use(express.json({ limit: '50mb' }));
 app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/imagineer', imageRoutes); // Keep the endpoint name for compatibility with frontend
 
-app.get('/', async (req, res) => {
-  res.status(200).json({
-    message: 'Hello from Imagineer!',
-  });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ✅ Serve static frontend build files
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// ✅ Catch-all route (for React Router)
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
 
 const startServer = async () => {
   try {
-    connectDB(process.env.MONGODB_URL);
+    await connectDB(process.env.MONGODB_URL);
     app.listen(8080, () => console.log('Server started on port 8080'));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
