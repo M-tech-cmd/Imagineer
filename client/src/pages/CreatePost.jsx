@@ -28,8 +28,7 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        // Use local server for development
-        const response = await fetch('http://localhost:8080/api/v1/imagineer', {
+        const response = await fetch('https://imagineer-mydc.onrender.com/api/v1/imagineer', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -42,12 +41,13 @@ const CreatePost = () => {
         const data = await response.json();
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
       } catch (err) {
-        alert(err);
+        alert('Image generation failed. Please try again.');
+        console.error(err);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert('Please provide proper prompt');
+      alert('Please provide a valid prompt.');
     }
   };
 
@@ -57,8 +57,7 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        // Use local server for development
-        const response = await fetch('http://localhost:8080/api/v1/post', {
+        const response = await fetch('https://imagineer-mydc.onrender.com/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,15 +66,16 @@ const CreatePost = () => {
         });
 
         await response.json();
-        alert('Success');
+        alert('Image shared successfully!');
         navigate('/');
       } catch (err) {
-        alert(err);
+        alert('Failed to share the post.');
+        console.error(err);
       } finally {
         setLoading(false);
       }
     } else {
-      alert('Please generate an image with proper details');
+      alert('Please generate an image before sharing.');
     }
   };
 
@@ -83,7 +83,9 @@ const CreatePost = () => {
     <section className="max-w-7xl mx-auto">
       <div>
         <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
-        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">Generate an imaginative image through Imagineer and share it with the community</p>
+        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
+          Generate an imaginative image through Imagineer and share it with the community
+        </p>
       </div>
 
       <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
@@ -92,7 +94,7 @@ const CreatePost = () => {
             labelName="Your Name"
             type="text"
             name="name"
-            placeholder="please enter your name"
+            placeholder="Please enter your name"
             value={form.name}
             handleChange={handleChange}
           />
@@ -109,18 +111,10 @@ const CreatePost = () => {
           />
 
           <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
-            { form.photo ? (
-              <img
-                src={form.photo}
-                alt={form.prompt}
-                className="w-full h-full object-contain"
-              />
+            {form.photo ? (
+              <img src={form.photo} alt={form.prompt} className="w-full h-full object-contain" />
             ) : (
-              <img
-                src={preview}
-                alt="preview"
-                className="w-9/12 h-9/12 object-contain opacity-40"
-              />
+              <img src={preview} alt="preview" className="w-9/12 h-9/12 object-contain opacity-40" />
             )}
 
             {generatingImg && (
@@ -135,14 +129,16 @@ const CreatePost = () => {
           <button
             type="button"
             onClick={generateImage}
-            className=" text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {generatingImg ? 'Generating...' : 'Generate'}
           </button>
         </div>
 
         <div className="mt-10">
-          <p className="mt-2 text-[#666e75] text-[14px]">Once you have created the image you want, you can share it with others in the community</p>
+          <p className="mt-2 text-[#666e75] text-[14px]">
+            Once you have created the image you want, you can share it with others in the community
+          </p>
           <button
             type="submit"
             className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
