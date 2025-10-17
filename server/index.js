@@ -23,15 +23,17 @@ const __dirname = path.dirname(__filename);
 // ✅ Serve static frontend build files
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// ✅ Catch-all route (for React Router)
-app.get('*', (req, res) => {
+// ✅ Fix: Catch-all route (Express v5 syntax)
+app.get('/*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
 
 const startServer = async () => {
   try {
     await connectDB(process.env.MONGODB_URL);
-    app.listen(8080, () => console.log('Server started on port 8080'));
+
+    const port = process.env.PORT || 8080; // ✅ Ensure port binding works on Render
+    app.listen(port, () => console.log(`✅ Server started on port ${port}`));
   } catch (error) {
     console.error(error);
   }
