@@ -71,3 +71,7 @@ Then visit [http://localhost:5173](http://localhost:5173) to explore Imagineer.
 
 MIT License © 2025 **M-Tech-Cmd**
 All Rights Reserved.
+
+
+![image alt](https://github.com/M-tech-cmd/Imagineer/blob/c286dd7b7cbc230cd8e7c99e4169eeded8f59dde/client/src/assets/WhatsApp%20Image%202025-10-17%20at%2021.39.35_9efa17b5.jpg)
+![image alt](https://github.com/M-tech-cmd/Imagineer/blob/c286dd7b7cbc230cd8e7c99e4169eeded8f59dde/client/src/assets/WhatsApp%20Image%202025-10-18%20at%2010.51.53_cad04d35.jpg)
